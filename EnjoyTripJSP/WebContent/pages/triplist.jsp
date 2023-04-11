@@ -217,6 +217,8 @@
 
             let response = await fetch( url + urlParams );
             let data = await response.json();
+            console.log("json "+data);
+            
             makeCard(data);
             console.log( data );
 
