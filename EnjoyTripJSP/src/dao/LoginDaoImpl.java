@@ -57,6 +57,7 @@ public class LoginDaoImpl implements LoginDao{
 		    	userDto.setUserRegisterDate(rs.getDate("user_register_date"));
 		    }
 		    
+		   
 		    
 		}catch(Exception e){
 			e.printStackTrace();

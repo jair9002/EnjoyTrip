@@ -19,6 +19,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int userRegister(UserDto userDto) {
 		// TODO Auto-generated method stub
+
+		// 여기서, userDto의 패스워드를 암호화할 예정임
+
+		String originalInputPassword = userDto.getUserPassword();
+		String convertHashPassword = hashPassword(originalInputPassword);
+
+		userDto.setUserPassword(convertHashPassword);
+
 		return userDao.userRegister(userDto);
 	}
 
@@ -38,6 +46,16 @@ public class UserServiceImpl implements UserService {
 	public int userDelete(String userId) {
 		// TODO Auto-generated method stub
 		return userDao.userDelete(userId);
+	}
+
+	public String hashPassword(String password) {
+
+		int hash = 0;
+		for (int i = 0; i < password.length(); i++) {
+			char c = password.charAt(i);
+			hash = (hash * 31 + c) ^ (c * i);
+		}
+		return Integer.toString(hash);
 	}
 
 }
