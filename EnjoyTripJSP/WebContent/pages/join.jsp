@@ -243,7 +243,7 @@
        let data = await response.json(); // json -> javascript object
        // data.result시, "success" || "fail" 이 나오도록 Backend에 규정되어있다.
        if (data.result == "success") {
-    	   alert("회원가입을 축하합니다. 메인 페이지로 이동합니다.");
+    	   alert("회원가입을 축하합니다. 로그인 페이지로 이동합니다.");
     	   window.location.href = "<%=contextPath%>/index.jsp"
        }
        else alert("fail");

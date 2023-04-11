@@ -1,92 +1,75 @@
-# EnjoyTripJSP_02_KGR_JMJ
+# EnjoyTrip_3_BackEnd_02조_김규리_정명진
+
+# 기본
+## 1. 메인 페이지 및 메뉴 구성
+session을 이용하여 현재 사용자가 로그인 상태인지에 따라 로그인 화면으로 리다이렉션 할지 결정한다.
+![image](https://user-images.githubusercontent.com/64851797/227995964-aa57f956-81a0-4551-918b-25d061fa376b.png)
+
+
+## 2. 관광지 정보 조회 
+대, 중, 소분류 선택을 통한 API 조회 결과를 출력한다. 만약 이미지가 없는 경우라면 싸피 기본 로고를 적용한다.
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/279fee40b04b1934ede1830ab268425ff8e95383/ImageFiles/search1.png)
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/a57b217f721c1150a1bad0761a4933c137cbb548/ImageFiles/tttstst.png)
 
 
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## 3. 회원관리 페이지 
+### 3-1. 등록 (회원가입)
+![image](https://user-images.githubusercontent.com/64851797/227997040-cd6f67dc-3e17-49ff-96c1-c45c2784010f.png)
+![image](https://user-images.githubusercontent.com/64851797/227997962-8dc73e9f-8ac2-42de-b938-2a774b55bb8f.png)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+### 3-2. 수정
+: 수정하려는 Password 입력 후, 변경된 DB내용 비교 
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/modify1UI.png)
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/modify2DB.png)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
 
-```
-cd existing_repo
-git remote add origin https://lab.ssafy.com/jmj2588547/enjoytripjsp_02_kgr_jmj.git
-git branch -M master
-git push -uf origin master
-```
+### 3-3. 삭제
+:삭제하려는 Email 입력 후, 변경된 DB내용 비교 
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/delete1ui.png)
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/delete2DB.png)
 
-## Integrate with your tools
+### 3-4. 조회 
+:조회 후 , 출력되는 Alert내용과 DB내용 비교
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/detail1UI.png)
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/detail2DB.png)
 
-- [ ] [Set up project integrations](https://lab.ssafy.com/jmj2588547/enjoytripjsp_02_kgr_jmj/-/settings/integrations)
+## 4. 로그인/로그아웃 페이지 
+: 첫 화면 접근 시 로그인, 혹은 회원가입을 통하여 메인페이지 이동
+![image](https://user-images.githubusercontent.com/64851797/227995964-aa57f956-81a0-4551-918b-25d061fa376b.png)
 
-## Collaborate with your team
+: 로그아웃 버튼을 통하여 세션 초기화 및 초기 화면으로 리다이렉트
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/279fee40b04b1934ede1830ab268425ff8e95383/ImageFiles/logout.png)
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+# 심화
 
-## Test and Deploy
+## 5-1. 게시글 생성  
+게시글 목록의 왼쪽 상단에 글쓰기 버튼을 누르면 글을 작성할 수 있다.
+![image](https://user-images.githubusercontent.com/64851797/227999146-1534facc-2b2c-42d0-a4a9-3e5890d6b3d8.png)
+작성 성공시, alertify를 사용하여 확인할 수 있다.
+![image](https://user-images.githubusercontent.com/64851797/227999154-dc0e4dee-baa1-4b67-bcde-71b001ebe96e.png)
+![image](https://user-images.githubusercontent.com/64851797/227999265-af394746-ecd4-4de5-854f-ab864df10add.png)
+## 5-2. 게시글 조회  
+게시글 상세 조회는 원하는 게시글을 클릭할 시, 모달창을 통해 확인할 수 있다.
+![image](https://user-images.githubusercontent.com/64851797/227999317-63188594-5c57-4ef3-a143-ffd2c6a6392a.png)
+## 5-3. 게시글 수정
+글을 수정하고 싶다면 상세조회에서 글 수정하기를 클릭하여 수정할 수 있다.
+![image](https://user-images.githubusercontent.com/64851797/227999482-95013582-9a91-4af8-8f05-f3537e834448.png)
+수정이 완료된 화면, alertify를 활용하여 확인 가능하다.
+![image](https://user-images.githubusercontent.com/64851797/227999496-e4f344aa-ff2e-4226-af99-a7e7bfbc667d.png)
+![image](https://user-images.githubusercontent.com/64851797/228000090-100919eb-34b9-4f3e-b69b-756b86b014ac.png)
+## 5-4. 게시글 삭제
 
-Use the built-in continuous integration in GitLab.
+게시글 삭제는 원하는 게시글을 클릭할 시, 글 삭제하기 버튼을 클릭하면 된다.
+![image](https://user-images.githubusercontent.com/64851797/227999317-63188594-5c57-4ef3-a143-ffd2c6a6392a.png)
+alertify를 활용하여 다시 한번 확인한다.
+![image](https://user-images.githubusercontent.com/64851797/228000837-8650e4aa-879e-44d0-9c20-af53d3a7ffb3.png)
+![image](https://user-images.githubusercontent.com/64851797/228000842-f64f30d6-9747-47cf-9961-f3d4aaa6cc3a.png)
+![image](https://user-images.githubusercontent.com/64851797/228000846-b8a7acec-069d-4777-901c-b995a762df43.png)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 6. 사이트맵  
+![캡처](https://lab.ssafy.com/mandarining0918/enjoytrip_3_backend_02-KKR-JMJ/-/raw/40711e591c323bc4217e3be2a347b8fda33e43e4/ImageFiles/SiteMap.png)
 
-***
 
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.

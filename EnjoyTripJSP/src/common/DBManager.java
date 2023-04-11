@@ -1,33 +1,36 @@
 package common;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 public class DBManager {
 	// jdbc 직접 Connection 객체X
 		// Connection Pool
-		
-		public static Connection getConnection() {
-			Connection con = null;
-			// Component 가 Container의 Resource에 접근
-			try {
-				Context context = (Context) new InitialContext().lookup("java:comp/env/");
-				DataSource dataSource = (DataSource) context.lookup("jdbc/enjoytrip"); // context.xml 의 Resource name 속성
-				con = dataSource.getConnection();
-				
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			return con;
+	
+	private static DBManager instance = new DBManager();
+	
+	public static DBManager getInstance() {
+		return instance;
+	}
+	
+	private DBManager(){
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		
+	}
+		
+	public Connection getConnection() throws SQLException {
+		String url = "jdbc:mysql://127.0.0.1:3306/enjoytrip?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8";
+		String user = "root";
+		String pwd = "1234";
+		return DriverManager.getConnection(url, user, pwd);
+	}
 		public static void releaseConnection(PreparedStatement pstmt, Connection con) {
 		    try {
 		        if( pstmt != null ) pstmt.close();
@@ -47,7 +50,7 @@ public class DBManager {
 		    }
 		}
 
-		public void releaseConnection(AutoCloseable... params) {
+		public static void releaseConnection(AutoCloseable... params) {
 		    for (AutoCloseable ac : params) {
 		        if( ac != null ) {
 		            try {

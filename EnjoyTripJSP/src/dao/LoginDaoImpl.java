@@ -12,7 +12,7 @@ import dto.UserDto;
 public class LoginDaoImpl implements LoginDao{
 	
 	private static LoginDaoImpl instance = new LoginDaoImpl();
-	
+	private DBManager dbManaber = DBManager.getInstance();
 	
 
 	private LoginDaoImpl() {
@@ -33,7 +33,7 @@ public class LoginDaoImpl implements LoginDao{
 		UserDto userDto = null;
 		
 		try {
-			con = DBManager.getConnection();
+			con = dbManaber.getConnection();
 			// insert
 			
 			StringBuilder sb = new StringBuilder();
