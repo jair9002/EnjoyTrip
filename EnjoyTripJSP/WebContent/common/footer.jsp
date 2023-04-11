@@ -16,8 +16,8 @@
 	          <ul class="navbar-nav">
 	            <li><a href="#" class="nav-link text-secondary">부울경</a></li>
 	            <li><a href="#" class="nav-link text-secondary">3반</a></li>
-	            <li><a href="#" class="nav-link text-secondary">정명진</a></li>
 	            <li><a href="#" class="nav-link text-secondary">김규리</a></li>
+	            <li><a href="#" class="nav-link text-secondary">오철원</a></li>
 	            <li><label class="nav-link text-secondary">&copy; SSAFY Corp.</label></li>
 	          </ul>
 	
