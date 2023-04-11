@@ -12,7 +12,7 @@ import dto.UserDto;
 public class LoginDaoImpl implements LoginDao{
 	
 	private static LoginDaoImpl instance = new LoginDaoImpl();
-	private DBManager dbManaber = DBManager.getInstance();
+	
 	
 
 	private LoginDaoImpl() {
@@ -33,7 +33,7 @@ public class LoginDaoImpl implements LoginDao{
 		UserDto userDto = null;
 		
 		try {
-			con = dbManaber.getConnection();
+			con = DBManager.getConnection();
 			// insert
 			
 			StringBuilder sb = new StringBuilder();
@@ -48,8 +48,6 @@ public class LoginDaoImpl implements LoginDao{
 			rs = pstmt.executeQuery();
 			
 		    if (rs.next()) {
-		    	System.out.println("index.jsp - UserServlet - LoginDaoImpl - DB 회원정보 전달받음");
-		    	
 		    	userDto = new UserDto();
 		    	userDto.setUserSeq(rs.getInt("user_seq"));
 		    	userDto.setUserName(rs.getString("user_name"));

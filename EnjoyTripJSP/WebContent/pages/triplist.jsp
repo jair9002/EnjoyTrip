@@ -38,52 +38,77 @@
     <!-- 상단 navbar start -->
      <%@ include file="../common/nav.jsp" %>
     <!-- 상단 navbar end -->
-	<!-- 중앙 content start -->
-	<div class="container f-gd">
-	  <!-- <div style="height: 70px"></div> -->
-	  <div class="row">
-	    <!-- 중앙 center content end -->
-	    <div class="col-md-12">
-	      <div class="alert alert-primary mt-3 text-center fw-bold" role="alert">
-	        <span class="badge bg-secondary">SEARCH HERE</span>
-	        <p class="mt-2 fs-3">관광지를 검색해봐!</p>
-	      </div>
-	
-	      <!--  java이용 api 가져오기 start -->
-	      <form class="d-flex my-3"> 
-	        <select id="area1List" class="form-select me-2">
-	          <option value="">시도를 선택하세요</option>
-	        </select>
-	        <select id="area2List" class="form-select me-2">
-	          <option value="">구군을 선택하세요</option>
-	        </select>
-	
-	        <select id="cat1List" class="form-select me-2">
-	          <option value="">대분류 선택하세요</option>
-	        </select>
-	        <select id="cat2List" class="form-select me-2">
-	          <option value="">중분류 선택하세요</option>
-	        </select>
-	        <select id="cat3List" class="form-select me-2">
-	          <option value="">소분류 선택하세요</option>
-	        </select>
-	      </form>
-	      <input id="search-keyword" class="form-control me-2" type="search" placeholder="검색어" aria-label="검색어" />
-          <button id="btnSearch" class="btn btn-outline-success" type="button">검색</button>
-	      
-	      <!--  java이용 api 가져오기 end -->
-	
-	      <!-- kakao map start -->
-	      <div id="map" class="my-3" style="width: 100%; height: 400px"></div>
-	      <!-- kakao map end -->
-	
-	      <!-- 카드 추가-->
-	      <div class="card-group" id="cardSection"></div>
-	    </div>
-	  </div>
-	</div>
-	<!-- 중앙 content end -->
+    <!-- 중앙 content start -->
+    <div class="container f-gd">
+      <div style="height: 70px"></div>
+      <div class="row">
+        <!-- 중앙 center content end -->
+        <div class="col-md-12">
+          <div
+            class="alert alert-primary mt-3 text-center fw-bold"
+            role="alert"
+          >
+            <span class="badge bg-secondary">SEARCH HERE</span>
+            <p class="mt-2 fs-3">관광지를 검색해봐!</p>
+          </div>
 
+          <!-- 검색 창 start -->
+          <div class="container text-center">
+            <form class="d-flex my-3" onsubmit="return false;" role="search">
+              <select id="search-area" class="form-select me-2">
+                <option value="0" selected>검색 할 지역 선택</option>
+              </select>
+              <select id="search-content-id" class="form-select me-2">
+                <option value="0" selected>관광지 유형</option>
+                <option value="12">관광지</option>
+                <option value="14">문화시설</option>
+                <option value="15">축제공연행사</option>
+                <option value="25">여행코스</option>
+                <option value="28">레포츠</option>
+                <option value="32">숙박</option>
+                <option value="38">쇼핑</option>
+                <option value="39">음식점</option>
+              </select>
+              <input
+                id="search-keyword"
+                class="form-control me-2"
+                type="search"
+                placeholder="검색어"
+                aria-label="검색어"
+              />
+              <button
+                id="btn-search"
+                class="btn btn-outline-success"
+                style="width: 13%"
+                type="button"
+              >
+                검색
+              </button>
+            </form>
+            <!-- 검색창 end -->
+
+            <!-- kakao map start -->
+            <div id="map" class="my-3" style="width: 100%; height: 400px"></div>
+            <!-- kakao map end -->
+
+            <!-- 카드 추가-->
+            <div class="card-group" id="cardSection"></div>
+          </div>
+
+          <!--  DummyDATA -->
+          <div class="row">
+            <table class="table table-striped" style="display: flex">
+              <thead>
+                <tr></tr>
+              </thead>
+              <tbody id="trip-list"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container text-center"></div>
+      </div>
+    </div>
+    <!-- 중앙 content end -->
     <!-- 하단 footer start -->
      <%@ include file="../common/footer.jsp" %>
     <!-- 하단 footer end -->
@@ -99,11 +124,57 @@
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9386cc73410429e9716c9e03472794f2&libraries=services,clusterer,drawing"
     ></script>
     <script>
+      // index page 로딩 후 전국의 시도 설정.
+      let areaUrl =
+        "https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=" +
+        serviceKey +
+        "&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json";
+
+      // fetch(areaUrl, { method: "GET" }).then(function (response) { return response.json() }).then(function (data) { makeOption(data); });
+      fetch(areaUrl, { method: "GET" })
+        .then((response) => response.json())
+        .then((data) => makeOption(data));
+
+      function makeOption(data) {
+        let areas = data.response.body.items.item;
+        // console.log(areas);
+        let sel = document.getElementById("search-area");
+        areas.forEach((area) => {
+          let opt = document.createElement("option");
+          opt.setAttribute("value", area.code);
+          opt.appendChild(document.createTextNode(area.name));
+
+          sel.appendChild(opt);
+        });
+      }
+
+      // 검색 버튼을 누르면..
+      // 지역, 유형, 검색어 얻기.
+      // 위 데이터를 가지고 공공데이터에 요청.
+      // 받은 데이터를 이용하여 화면 구성.
+      document.getElementById("btn-search").addEventListener("click", () => {
+        let searchUrl = `https://apis.data.go.kr/B551011/KorService1/searchKeyword1?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`;
+
+        let areaCode = document.getElementById("search-area").value;
+        let contentTypeId = document.getElementById("search-content-id").value;
+        let keyword = document.getElementById("search-keyword").value;
+
+        if (parseInt(areaCode)) searchUrl += `&areaCode=${areaCode}`;
+        if (parseInt(contentTypeId))
+          searchUrl += `&contentTypeId=${contentTypeId}`;
+        if (!keyword) {
+          alert("검색어 입력 필수!!!");
+          return;
+        } else searchUrl += `&keyword=${keyword}`;
+
+        fetch(searchUrl)
+          .then((response) => response.json())
+          .then((data) => makeList(data));
+      });
+
       var positions; // marker 배열.
-      function makeCard(data) {
-    	 
-    	console.log("we are in makeCard!!");
-    	console.log(data);
+      function makeList(data) {
+        document.querySelector("table").setAttribute("style", "display: ;");
         let trips = data.response.body.items.item;
         let tripList = ``;
         positions = [];
@@ -114,11 +185,13 @@
         trips.forEach((area) => {
           tripList += `
             <div class="col">
-              <div class="card">
-                <img src="\${ area.firstimage != '' ? area.firstimage : default_img}" class="card-img-top" style="height: 20rem" alt="...">
+              <div class="card" >
+                <img src="${
+                  area.firstimage != "" ? area.firstimage : default_img
+                }" class="card-img-top" style="height: 20rem" alt="...">
                 <div class="card-body">
-                  <h5 class="card-title fw-bold">\${area.title}</h5>
-                  <p class="card-text"> 주소 : \${area.addr1}</p>
+                  <h5 class="card-title fw-bold">${area.title}</h5>
+                  <p class="card-text"> 주소 : ${area.addr1}</p>
                   <a href="#" class="btn btn-primary" >상세보기</a>
                 </div>
               </div>
@@ -176,162 +249,6 @@
       function moveCenter(lat, lng) {
         map.setCenter(new kakao.maps.LatLng(lat, lng));
       }
-    </script>
-    
-    <!-- api 코드 start -->
-    <script>
-        // areaBsedList1 Service 를 이용한다.
-        // BackEnd 를 이용하므로, areaCode 와 categoryCode 를 조건으로 모두 포함하는 페이지이다.
-
-        // 공유 전역 변수
-        let numOfRows = 10;
-        let pageNo = 1;
-        let areaCode = '';
-        let sigunguCode = '';
-        let cat1 = '';
-        let cat2 = '';
-        let cat3 = '';
-
-        window.onload = async function(){
-            await getArea1List();
-            await getCat1List();
-
-            document.querySelector("#btnSearch").onclick = function(){
-                sigunguCode = document.querySelector("#area2List").value;
-                cat3 = document.querySelector("#cat3List").value;
-                getList();
-            }
-        };
-
-        async function getList(){
-
-            let url = `/EnjoyTripJSP/trip/list`;
-            let urlParams = "?numOfRows=" + numOfRows + "&pageNo=" + pageNo + "&areaCode=" + areaCode + "&sigunguCode=" + sigunguCode + "&cat1=" + cat1 
-            		+"&cat2="
-            		+ cat2
-            		+ "&cat3="
-            		+ cat3;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            makeCard(data);
-            console.log( data );
-
-            let itemList = data.response.body.items.item;
-            console.log( itemList);
-
-        }
-
-        async function getArea1List(){
-
-            let url = `/EnjoyTripJSP/trip/areaCode`;
-	        let urlParams = "?numOfRows=" + numOfRows + "&pageNo= " + pageNo;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            console.log( data );
-
-            let codeList = data.response.body.items.item;
-            console.log( codeList);
-
-            let listHtml = `<option value=''>시도를 선택하세요</option>`;
-            codeList.forEach( el => {
-            	listHtml += "<option value=" + el.code + ">" + el.name + "</option>";
-            })
-            document.querySelector("#area1List").innerHTML = listHtml;
-
-            // change event handler
-            document.querySelector("#area1List").onchange = function(e){
-                areaCode = e.target.value;
-                getArea2List();
-            }
-        }
-
-        async function getArea2List(){
-
-            let url = `/EnjoyTripJSP/trip/areaCode`;
-	        let urlParams = "?numOfRows=" + numOfRows + "&pageNo=" + pageNo + "&areaCode=" + areaCode;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            console.log( data );
-
-            let codeList = data.response.body.items.item;
-            console.log( codeList);
-
-            let listHtml = `<option value=''>구군을 선택하세요</option>`;
-            codeList.forEach( el => {
-            	listHtml += "<option value=" + el.code + ">" + el.name + "</option>";
-            })
-            document.querySelector("#area2List").innerHTML = listHtml;
-        }
-
-        async function getCat1List(){
-
-            let url = `/EnjoyTripJSP/trip/categoryCode`;
-	        let urlParams = "?numOfRows=" + numOfRows + "&pageNo=" + pageNo;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            console.log( data );
-
-            let codeList = data.response.body.items.item;
-            console.log( codeList);
-
-            let listHtml = `<option value=''>대분류 선택하세요</option>`;
-            codeList.forEach( el => {
-                listHtml += "<option value=" + el.code + ">" + el.name + "</option>";
-            })
-            document.querySelector("#cat1List").innerHTML = listHtml;
-
-            // change event handler
-            document.querySelector("#cat1List").onchange = function(e){
-                cat1 = e.target.value;
-                getCat2List();
-            }
-        }
-
-        async function getCat2List(){
-            let url = `/EnjoyTripJSP/trip/categoryCode`;
-	        let urlParams = "?numOfRows=" + numOfRows +"&pageNo=" + pageNo + "&cat1=" + cat1;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            console.log( data );
-
-            let codeList = data.response.body.items.item;
-            console.log( codeList);
-
-            let listHtml = `<option value=''>중분류 선택하세요</option>`;
-            codeList.forEach( el => {
-            	listHtml += "<option value=" + el.code + ">" + el.name + "</option>";
-            })
-            document.querySelector("#cat2List").innerHTML = listHtml;
-
-            // change event handler
-            document.querySelector("#cat2List").onchange = function(e){
-                cat2 = e.target.value;
-                getCat3List();
-            }
-        }
-
-        async function getCat3List(){
-            let url = `/EnjoyTripJSP/trip/categoryCode`;
-	        let urlParams = "?numOfRows=" + numOfRows + "&pageNo=" + pageNo + "&cat1=" + cat1 + "&cat2=" + cat2;
-
-            let response = await fetch( url + urlParams );
-            let data = await response.json();
-            console.log( data );
-
-            let codeList = data.response.body.items.item;
-            console.log( codeList);
-
-            let listHtml = `<option value=''>소분류 선택하세요</option>`;
-            codeList.forEach( el => {
-            	listHtml += "<option value=" + el.code + ">" + el.name + "</option>";
-            })
-            document.querySelector("#cat3List").innerHTML = listHtml;
-        }
     </script>
   </body>
 </html>

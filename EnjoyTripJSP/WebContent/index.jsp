@@ -80,7 +80,5 @@
 		<%@ include file="common/footer.jsp"%>
 		<!-- 하단 footer end -->
 
-
 	</body>
-	
 </html>

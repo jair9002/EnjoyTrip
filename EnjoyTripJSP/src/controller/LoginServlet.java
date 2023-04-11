@@ -25,21 +25,12 @@ public class LoginServlet extends HttpServlet {
 
 	LoginService loginService = LoginServiceImpl.getInstance();
 	
-	////
+	
 	//logout
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 세션 초기화
+
 		HttpSession session = request.getSession();
 		session.invalidate();
-		
-		Gson gson = new Gson();
-		JsonObject jsonObject = new JsonObject();
-		
-		jsonObject.addProperty("result", "success");
-		String jsonStr = gson.toJson(jsonObject); // json 문자열
-		
-
-		response.getWriter().write(jsonStr);
 	}
 
 	//login
@@ -57,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		String jsonStr = null;
 		
 		if ( userDto != null) {
-			// 세션에 사용자 정보를 담아놔야 함!!
+
 			HttpSession session = request.getSession();
 			session.setAttribute("userDto",  userDto);
 			
