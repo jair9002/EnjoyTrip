@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 
 	LoginService loginService = LoginServiceImpl.getInstance();
 	
-	
+	//
 	//logout
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 세션 초기화
