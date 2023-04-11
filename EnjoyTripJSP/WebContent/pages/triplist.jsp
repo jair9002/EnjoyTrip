@@ -68,7 +68,8 @@
 	          <option value="">소분류 선택하세요</option>
 	        </select>
 	      </form>
-	      <button id="btnSearch" class="btn btn-outline-success">검색</button>
+	        <input id="search-keyword" class="form-control me-2" type="search" name="search" placeholder="검색어" aria-label="검색어" />
+          <button id="btnSearch" class="btn btn-outline-success" type="button">검색</button>
 	      <!--  java이용 api 가져오기 end -->
 	
 	      <!-- kakao map start -->
@@ -189,7 +190,8 @@
         let cat1 = '';
         let cat2 = '';
         let cat3 = '';
-
+		let search = '';
+		
         window.onload = async function(){
             await getArea1List();
             await getCat1List();
@@ -197,6 +199,7 @@
             document.querySelector("#btnSearch").onclick = function(){
                 sigunguCode = document.querySelector("#area2List").value;
                 cat3 = document.querySelector("#cat3List").value;
+                search = document.querySelector("#search-keyword").value;
                 getList();
             }
         };
@@ -208,7 +211,9 @@
             		+"&cat2="
             		+ cat2
             		+ "&cat3="
-            		+ cat3;
+            		+ cat3
+            		+ "&search="
+            		+ search;
 
             let response = await fetch( url + urlParams );
             let data = await response.json();

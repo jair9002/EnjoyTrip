@@ -25,6 +25,7 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
     private String _type = "json";
 	private String numOfRows;
 	private String pageNo;
+	private String search; //kmp를 위한 검색어 패턴
 
 	private String getServiceURL(String areaCode, String sigunguCode, String cat1, String cat2, String cat3) {
 		StringBuilder sb = new StringBuilder("https://apis.data.go.kr/B551011/KorService1/");
@@ -41,6 +42,7 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
 			.append("&cat1=").append(cat1)
 			.append("&cat2=").append(cat2)
 			.append("&cat3=").append(cat3);
+		
 		return sb.toString();
 	}
 	
@@ -67,6 +69,9 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
 		String cat3 = request.getParameter("cat3");
 		cat3 = cat3 == null || "".equals(cat3) ? "" : cat3;
 		
+		String search = request.getParameter("search");
+		search = search == null || "".equals(search) ? "" : cat3;
+		
 		this.serviceUrl = getServiceURL(areaCode, sigunguCode, cat1, cat2, cat3);
 		
 		System.out.println(serviceUrl);
@@ -92,7 +97,7 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
         br.close();
         conn.disconnect();
         
-        System.out.println(result.toString());
+        System.out.println(result.toString()); // 여기서 name 만 추출해서 kmp 적용
         
 		response.addHeader("Access-Control-Allow-Origin", "*"); // VSCode Live Server Request
 		
