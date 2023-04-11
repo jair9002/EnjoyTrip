@@ -68,8 +68,11 @@
 	          <option value="">소분류 선택하세요</option>
 	        </select>
 	      </form>
-	        <input id="search-keyword" class="form-control me-2" type="search" name="search" placeholder="검색어" aria-label="검색어" />
-          <button id="btnSearch" class="btn btn-outline-success" type="button">검색</button>
+	      
+	      <div class="d-flex">
+  			<input id="search-keyword" class="form-control me-2" type="search" name="search" placeholder="검색어" aria-label="검색어" />
+  			<button id="btnSearch" class="btn btn-outline-success" type="button">검색</button>
+		  </div>
 	      <!--  java이용 api 가져오기 end -->
 	
 	      <!-- kakao map start -->
