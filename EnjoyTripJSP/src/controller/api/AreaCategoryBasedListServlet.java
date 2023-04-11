@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.JsonKMP;
+
 // FrontEnd / project / trip / areaCategoryBasedListWithBE.html
 @WebServlet("/trip/list")
 public class AreaCategoryBasedListServlet extends HttpServlet {
@@ -70,7 +72,7 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
 		cat3 = cat3 == null || "".equals(cat3) ? "" : cat3;
 		
 		String search = request.getParameter("search");
-		search = search == null || "".equals(search) ? "" : cat3;
+		search = search == null || "".equals(search) ? "" : search;
 		
 		this.serviceUrl = getServiceURL(areaCode, sigunguCode, cat1, cat2, cat3);
 		
@@ -98,11 +100,16 @@ public class AreaCategoryBasedListServlet extends HttpServlet {
         conn.disconnect();
         
         System.out.println(result.toString()); // 여기서 name 만 추출해서 kmp 적용
+        String kmpResult = result.toString();
         
+        if(!search.equals("")) {
+        	JsonKMP jsonKMP = new JsonKMP();
+        	 kmpResult = jsonKMP.parsing(result.toString(), search); //kmp 수행
+        }
 		response.addHeader("Access-Control-Allow-Origin", "*"); // VSCode Live Server Request
 		
 		response.setContentType("application/json; charset=utf-8");
-		response.getWriter().write(result.toString());
+		response.getWriter().write(kmpResult);
         
 	}
 
