@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mysql.cj.xdevapi.JsonArray;
+
 import common.DBManager;
 import dto.UserDto;
 
@@ -89,14 +93,12 @@ public class UserDaoImpl implements UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		StringBuilder sb = new StringBuilder();
-
+		sb.append("SELECT * from users").append(" WHERE user_email = ?");
 		int ret = -1;
 		try {
 			con = dbManaber.getConnection();
 			pstmt = con.prepareStatement(sb.toString());
 			pstmt.setString(1, userEmail);
-
-			sb.append("SELECT * from users").append(" WHERE user_email = ?");
 
 			if (rs.next()) {
 				UserDto user = new UserDto();
@@ -105,6 +107,7 @@ public class UserDaoImpl implements UserDao {
 				user.setUserEmail(rs.getString("user_email"));
 				user.setUserPassword(rs.getString("user_password"));
 				user.setUserRegisterDate(rs.getDate("user_register_date"));
+				user.setFavoritesAttraction(rs.getString("favorites_attraction"));
 
 				return user;
 			}
@@ -114,7 +117,7 @@ public class UserDaoImpl implements UserDao {
 		} finally {
 			DBManager.releaseConnection(pstmt, con, rs);
 		}
-		
+
 		return null;
 	}
 
@@ -126,11 +129,10 @@ public class UserDaoImpl implements UserDao {
 		StringBuilder sb = new StringBuilder();
 		PreparedStatement pstmt2 = null;
 		StringBuilder sb2 = new StringBuilder();
-		
+
 		sb.append("SELECT * from users").append(" WHERE user_email = ?");
 		sb2.append("SELECT MAX(user_seq) FROM users");
 
-		
 		int ret = -1;
 		try {
 			con = dbManaber.getConnection();
@@ -203,12 +205,50 @@ public class UserDaoImpl implements UserDao {
 
 	public String hashPassword(String password) {
 
-        int hash = 0;
-        for (int i = 0; i < password.length(); i++) {
-            char c = password.charAt(i);
-            hash = (hash * 31 + c) ^ (c * i);
-        }
-        return Integer.toString(hash);
-    }
+		int hash = 0;
+		for (int i = 0; i < password.length(); i++) {
+			char c = password.charAt(i);
+			hash = (hash * 31 + c) ^ (c * i);
+		}
+		return Integer.toString(hash);
+	}
+
+	// user한테 JSON객체 형식으로 즐겨찾기 정보를 업데이트 해나가기
+
+	@Override
+	public int userAddAttraction(UserDto userDto) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		// 비밀번호만 변경가능하도록, 동시에 update_date를 갱신시킴
+		int ret = -1;
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("UPDATE users").append(" SET favorites_attractions = ?").append(" WHERE user_email = ? ");
+
+		try {
+			con = dbManaber.getConnection();
+			pstmt = con.prepareStatement(sb.toString());
+
+			pstmt.setString(1, userDto.getUserEmail());
+			pstmt.setString(2, userDto.getFavoritesAttraction());
+
+			System.out.print(pstmt.toString());
+
+			ret = pstmt.executeUpdate();
+
+			return ret; // 정상수행시, 1을 리턴해야함
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.releaseConnection(pstmt, con);
+		}
+
+		return 0;
+
+	}
+
+
 
 }

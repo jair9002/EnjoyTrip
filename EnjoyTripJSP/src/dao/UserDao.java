@@ -12,6 +12,7 @@ public interface UserDao {
 	UserDto userDetail(String userId); 
 	int userDelete(String userPwd, String userEmail, int userSeq);
 	
+	int userAddAttraction(UserDto userDto);
 	// 비번찾기, 로그인
 //	String findPassword(String userId);
 //	String userLogin(UserDto userDto);

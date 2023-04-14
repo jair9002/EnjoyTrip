@@ -45,9 +45,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 
 	public int userDelete(String userPwd, String userEmail, int userSeq) {
-	
+
 		return userDao.userDelete(userPwd, userEmail, userSeq);
-		
 
 	}
 
@@ -59,6 +58,21 @@ public class UserServiceImpl implements UserService {
 			hash = (hash * 31 + c) ^ (c * i);
 		}
 		return Integer.toString(hash);
+	}
+
+	@Override
+	public int userAddAttraction(UserDto userDto) {
+		
+		UserDto tmpUserDto =  userDao.userDetail(userDto.getUserEmail());
+		System.out.println(tmpUserDto.toString());
+		
+		String favoritesAttraction = tmpUserDto.getFavoritesAttraction();
+		StringBuilder sb = new StringBuilder();
+		sb.append(favoritesAttraction).append(" ").append(userDto.getFavoritesAttraction());
+
+		userDto.setFavoritesAttraction(sb.toString());
+		return userDao.userAddAttraction(userDto);
+
 	}
 
 }

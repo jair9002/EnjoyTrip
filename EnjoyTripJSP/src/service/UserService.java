@@ -10,6 +10,7 @@ public interface UserService {
 	int userUpdate(UserDto userDto);
 	UserDto userDetail(String userId); 
 	int userDelete(String userPwd, String userEmail, int userSeq);
+	int userAddAttraction(UserDto userDto);
 	
 	// 비번찾기, 로그인 -> 여기서 하지 말고 LoginService, LoginDao로 옮기자
 //	String findPassword(String userId);

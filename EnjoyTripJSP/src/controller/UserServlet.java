@@ -59,6 +59,9 @@ public class UserServlet extends HttpServlet {
 			// ?action=detail&userEmail=c@nav.com
 			detail(request, response);
 			break;
+		case "addAttraction" :
+			addAttraction(request, response);
+			break;
 		}
 	}
 	
@@ -141,7 +144,32 @@ public class UserServlet extends HttpServlet {
 //		response.sendRedirect(contextPath + "/user/registMobile.jsp");
 	}
 	
-	
+	protected void addAttraction(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String contextPath = request.getContextPath();
+
+		
+		String userEmail = request.getParameter("userEmail");
+		String contentid = request.getParameter("contentid");
+		System.out.println("정상실행, " + userEmail + " " + contentid);
+		
+		UserDto user = new UserDto();
+		user.setUserEmail(userEmail);
+		user.setFavoritesAttraction(contentid);
+		
+
+		int ret = service.userAddAttraction(user);
+
+		if (ret >= 1) {
+			System.out.println("Attraction 추가 성공");
+			request.setAttribute("result", "success");
+		} else {
+			System.out.println("Attraction 추가 실패");
+			request.setAttribute("result", "fail");
+		} 
+
+//		response.sendRedirect(contextPath + "/user/registMobile.jsp");
+	}
 
 	
 }

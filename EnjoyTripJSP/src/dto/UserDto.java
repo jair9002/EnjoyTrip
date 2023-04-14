@@ -8,6 +8,7 @@ public class UserDto {
 	private String userPassword;
 	private String userEmail;
 	private Date userRegisterDate;
+	private String favoritesAttraction; // JSON객체임 (JSON <-> String 변환 예정) 
 
 	public int getUserSeq() {
 		return userSeq;
@@ -35,12 +36,12 @@ public class UserDto {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserEmail() {
-		return userEmail;
+	public String getFavoritesAttraction() {
+		return favoritesAttraction;
 	}
 
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setFavoritesAttraction(String favoritesAttraction) {
+		this.favoritesAttraction = userEmail;
 	}
 
 	public Date getUserRegisterDate() {
@@ -50,6 +51,15 @@ public class UserDto {
 	public void setUserRegisterDate(Date userRegisterDate) {
 		this.userRegisterDate = userRegisterDate;
 	}
+	
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	
 
 	@Override
 	public String toString() {
