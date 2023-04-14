@@ -43,10 +43,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int userDelete(String userPwd, String userEmail) {
+	public int userDelete(String userPwd, String userEmail, int userSeq) {
 		// TODO Auto-generated method stub
 		
-		return userDao.userDelete(userPwd, userEmail);
+		return userDao.userDelete(userPwd, userEmail, userSeq);
 		
 	}
 

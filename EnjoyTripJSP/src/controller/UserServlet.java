@@ -101,8 +101,12 @@ public class UserServlet extends HttpServlet {
 		String userPwd = request.getParameter("userPwd");
 		String userEmail = request.getParameter("userEmail");
 
-		int ret = service.userDelete(userPwd, userEmail);
-
+		
+		
+		UserDto user = service.userDetail(userEmail);
+		int userSeq = user.getUserSeq();
+		
+		int ret = service.userDelete(userPwd, userEmail,userSeq);
 		if (ret == 1) {
 			System.out.println("delete 성공");
 			request.setAttribute("result", "success");
