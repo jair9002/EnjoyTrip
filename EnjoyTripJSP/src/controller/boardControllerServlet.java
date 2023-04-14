@@ -30,7 +30,7 @@ public class boardControllerServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		process(request, response);
+		process(request, response);//
 	}
 	
 	// GET, POST, PUT, DELETE 모두 처리
