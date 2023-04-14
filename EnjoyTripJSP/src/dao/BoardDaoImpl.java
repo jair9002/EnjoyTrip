@@ -221,5 +221,33 @@ public class BoardDaoImpl implements BoardDao{
 	    }
 	    return boardDto;
 	}
+	@Override
+	public int boardUpdateReadCount(int boardId, int readCount ) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+
+	    int ret = -1;
+	    
+	    try {
+	        con = DBManager.getInstance().getConnection();
+	        
+	        StringBuilder sb = new StringBuilder();
+	        sb.append("UPDATE BOARD SET read_count = ? ");
+	        sb.append(" WHERE BOARD_ID = ? ");
+
+	        pstmt = con.prepareStatement(sb.toString());
+	        pstmt.setInt(1,  readCount);
+	        pstmt.setInt(2,  boardId);
+
+	        ret = pstmt.executeUpdate();
+	        
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	    }finally {
+	        DBManager.releaseConnection(pstmt, con);
+	    }
+	    
+	    return ret;
+	}
 
 }

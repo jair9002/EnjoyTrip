@@ -385,11 +385,11 @@
 				alertify.success('글이 수정되었습니다.');
 				boardList();
 			}else{
-				alertify.error('글 수정 과젱에 문제가 있습니다.');
+				alertify.error('글 수정 과정에 문제가 있습니다.');
 			}
 		}catch( error ){
 			console.error( error );
-			alertify.error('글 수정 과젱에 문제가 있습니다.');
+			alertify.error('글 수정 과정에 문제가 있습니다.');
 		}
 	}
 
@@ -406,7 +406,7 @@
 			makeDetailHtml(data);
 		}catch( error ){
 			console.error( error );
-			alertify.error("글 조회과정에 문제가 생겼습니다.");
+			alertify.error("글 조회 과정에 문제가 생겼습니다.");
 		}
 	}
 	

@@ -6,28 +6,30 @@ import dao.BoardDao;
 import dao.BoardDaoImpl;
 import dto.BoardDto;
 
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
 	private static BoardServiceImpl instance = new BoardServiceImpl();
-	private BoardServiceImpl () {}
+
+	private BoardServiceImpl() {
+	}
+
 	public static BoardServiceImpl getInstance() {
 		return instance;
 	}
-	
+
 	BoardDao dao = BoardDaoImpl.getInstance();
-	
 
 	@Override
 	public List<BoardDto> boardList(int limit, int offset) {
 
 		return dao.boardList(limit, offset);
 	}
-	
+
 	@Override
 	public int boardListTotalCnt() {
-	    return dao.boardListTotalCnt();
+		return dao.boardListTotalCnt();
 	}
-	
+
 	@Override
 	public int boardInsert(BoardDto dto) {
 		return dao.boardInsert(dto);
@@ -44,14 +46,24 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public BoardDto boardDetail(int boardId, int userSeq) { // 현재 세션 사용자의 userSeq
+	public int boardUpdateReadCount(int boardId, int readCount) {
+		return dao.boardUpdateReadCount(boardId, readCount);
+	}
+
+	@Override
+	public BoardDto boardDetail(int boardId, int userSeq) { // �쁽�옱 �꽭�뀡 �궗�슜�옄�쓽 userSeq
 		BoardDto boardDto = dao.boardDetail(boardId);
-		if( boardDto.getUserSeq() == userSeq ) {
+
+		int originalReadCount = boardDto.getReadCount();
+		boardUpdateReadCount(boardId, originalReadCount + 1);
+
+		if (boardDto.getUserSeq() == userSeq) {
 			boardDto.setSameUser(true);
-		}else {
+
+		} else {
 			boardDto.setSameUser(false);
 		}
-		
+
 		return boardDto;
 	}
 }
