@@ -10,7 +10,7 @@ public interface UserDao {
 	// 수정, 조회, 탈퇴 ( from newPage(아마 myPage?) )
 	int userUpdate(UserDto userDto);
 	UserDto userDetail(String userId); 
-	int userDelete(String userId);
+	int userDelete(String userPwd, String userEmail);
 	
 	// 비번찾기, 로그인
 //	String findPassword(String userId);

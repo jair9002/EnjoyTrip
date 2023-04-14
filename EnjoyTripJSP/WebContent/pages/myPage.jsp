@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ page import="dto.*"%>
+<%
+   
+    UserDto userDto = (UserDto) session.getAttribute("userDto");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +72,7 @@
   <body>
     <!-- 상단 navbar start -->
      <%@ include file="../common/nav.jsp" %>
+     
     <!-- 상단 navbar end -->
     <!-- 중앙 content start -->
     <div class="container f-gd">
@@ -180,7 +185,7 @@
   const modifyBtn = document.querySelector("#userModifyBtn");
   const deleteBtn = document.querySelector("#userDeleteBtn");
   
-
+//라디오 버튼 누를때마 보이기 숨기기 처리
   function showUserEmailAndDetail() {
     // userEmailGroup 보이기, 나머지 숨기기
     userNameGroup.style.display = "none";
@@ -189,7 +194,7 @@
     
     searchBtn.style.display = "block";
     modifyBtn.style.display = "none";
-    deleteBtn.style.display = "none";
+    deleteBtn.style.display = "none"; 
     
     
   }
@@ -197,8 +202,8 @@
   function showUserEmailAndDelete() {
 	    // userEmailGroup 보이기, 나머지 숨기기
 	    userNameGroup.style.display = "none";
-	    userPwdGroup.style.display = "none";
-	    userEmailGroup.style.display = "block";
+	    userPwdGroup.style.display = "block";
+	    userEmailGroup.style.display = "none";
 	    
 	    searchBtn.style.display = "none";
 	    modifyBtn.style.display = "none";
@@ -294,26 +299,28 @@
   const userDeleteBtn = document.querySelector("#userDeleteBtn");
   
   userDeleteBtn.addEventListener("click", async () => {
-    const userEmail = document.querySelector("#userEmail2").value;
+    const userPwd = document.querySelector("#userPwd2").value;
 
     try {
-      const userInfo = await deleteUserInfo(userEmail);
+      const userInfo = await deleteUserInfo(userPwd);
       window.alert( "잘 삭제했어요!", "삭제  ");
     } catch (error) {
       console.error(error);
     }
   });
 
-  async function deleteUserInfo(userEmail) {
-    
-    console.log("userEmail: " + userEmail);
-    let response = await fetch("<%=contextPath%>/user?action=delete&userEmail=" + userEmail);
+  async function deleteUserInfo(userPwd) {
+    let userEmail = "<%=userDto.getUserEmail()%>";
+    //console.log("userEmail: " + userEmail);
+    let response = await fetch("<%=contextPath%>/user?action=delete&userPwd=" + userPwd+"&userEmail="+ userEmail);
     if (!response.ok) {
         alert(
       		  "회원 정보가 없거나, 잘못된 요청이에요!"
       		);
         
       throw new Error(`삭제실패했습니다! status: ${response.status}`);
+    }else {
+    	window.location.href="<%=contextPath%>/pages/login.jsp"
     }
   }
   // -------------- deleteUser끝 

@@ -20,7 +20,9 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public UserDto login(String userEmail, String userPassword) {
 		UserDto userDto = loginDao.login(userEmail);
-
+		
+		System.out.println("LoginServiceImpl 이메일, 패스워드: "+userEmail+" "+userPassword);
+		
 		String actualPassword = userDto.getUserPassword();
 		String hashedInputPassword = hashPassword(userPassword);
 
