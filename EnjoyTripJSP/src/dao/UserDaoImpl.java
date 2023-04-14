@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import common.DBManager;
 import dto.UserDto;
@@ -11,8 +12,7 @@ public class UserDaoImpl implements UserDao {
 
 	private static UserDaoImpl instance = new UserDaoImpl();
 	private DBManager dbManaber = DBManager.getInstance();
-	
-	
+
 	private UserDaoImpl() {
 	}
 
@@ -58,9 +58,8 @@ public class UserDaoImpl implements UserDao {
 		int ret = -1;
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("UPDATE users")
-			.append(" SET user_password = ?, user_register_date = now()")
-			.append(" WHERE user_email = ? ");
+		sb.append("UPDATE users").append(" SET user_password = ?, user_register_date = now()")
+				.append(" WHERE user_email = ? ");
 
 		try {
 			con = dbManaber.getConnection();
@@ -68,10 +67,9 @@ public class UserDaoImpl implements UserDao {
 
 			pstmt.setString(1, userDto.getUserPassword());
 			pstmt.setString(2, userDto.getUserEmail());
-			
+
 			System.out.print(pstmt.toString());
-			
-			
+
 			ret = pstmt.executeUpdate();
 
 			return ret; // 정상수행시, 1을 리턴해야함
@@ -92,42 +90,38 @@ public class UserDaoImpl implements UserDao {
 		ResultSet rs = null;
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * from users")
-			.append(" WHERE user_email = ?");
-
-		
+		sb.append("SELECT * from users").append(" WHERE user_email = ?");
 
 		int ret = -1;
 		try {
 			con = dbManaber.getConnection();
 			pstmt = con.prepareStatement(sb.toString());
 			pstmt.setString(1, userEmail);
-			
 
 			rs = pstmt.executeQuery();
 
-			if ( rs.next()) {
+			if (rs.next()) {
 				UserDto user = new UserDto();
 				user.setUserSeq(rs.getInt("user_seq"));
 				user.setUserName(rs.getString("user_name"));
 				user.setUserEmail(rs.getString("user_email"));
 				user.setUserPassword(rs.getString("user_password"));
 				user.setUserRegisterDate(rs.getDate("user_register_date"));
-				
+
 				return user;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DBManager.releaseConnection(pstmt, con, rs );
+			DBManager.releaseConnection(pstmt, con, rs);
 		}
 
 		return null;
 	}
 
 	@Override
-	public int userDelete(String userEmail) {
+	public int userDelete(String userEmail, int userSeq) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -135,19 +129,44 @@ public class UserDaoImpl implements UserDao {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" DELETE from users").append(" WHERE user_email = ?");
 
+		PreparedStatement pstmt2 = null;
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append("SELECT MAX(user_seq) FROM users");
+
 		int ret = -1;
 		try {
 			con = dbManaber.getConnection();
+			con.setAutoCommit(false);
+
+			// 1. ID가 입력된 데이터를 삭제
 			pstmt = con.prepareStatement(sb.toString());
 			pstmt.setString(1, userEmail);
 			ret = pstmt.executeUpdate();
 
-			if (ret == 1) {
-				return ret;
+			// 2. 해당 ID가 마지막 번호였다면 AUTO_INCREMENT 값을 삭제된 데이터 인덱스로 지정
+			pstmt2 = con.prepareStatement(sb2.toString());
+			ResultSet rs = pstmt2.executeQuery();
+			if (rs.next()) {
+				int maxUserSeq = rs.getInt(1);
+				if (userSeq > maxUserSeq) {
+					PreparedStatement pstmt3 = null;
+					StringBuilder sb3 = new StringBuilder();
+					sb3.append("ALTER TABLE users AUTO_INCREMENT = ? ");
+					pstmt3 = con.prepareStatement(sb3.toString());
+					pstmt3.setInt(1, userSeq);
+					pstmt3.executeUpdate();
+					pstmt3.close();
+				}
 			}
 
+			con.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		} finally {
 			DBManager.releaseConnection(pstmt, con);
 		}
