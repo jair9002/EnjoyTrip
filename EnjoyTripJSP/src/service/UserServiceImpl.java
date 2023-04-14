@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int userDelete(String userId, int user_seq) {
+	public int userDelete(String userId, String userEmail, int user_seq) {
 		// TODO Auto-generated method stub
-		return userDao.userDelete(userId, user_seq);
+		return userDao.userDelete(userId, userEmail, user_seq);
 	}
 
 	public String hashPassword(String password) {

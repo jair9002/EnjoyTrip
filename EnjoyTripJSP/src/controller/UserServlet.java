@@ -98,11 +98,12 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String contextPath = request.getContextPath();
 
+		String userPwd = request.getParameter("userPwd");
 		String userEmail = request.getParameter("userEmail");
 		UserDto user = service.userDetail(userEmail);
 		int userSeq = user.getUserSeq(); 
 		
-		int ret = service.userDelete(userEmail, userSeq);
+		int ret = service.userDelete(userPwd, userEmail, userSeq);
 
 		if (ret == 1) {
 			System.out.println("delete 성공");

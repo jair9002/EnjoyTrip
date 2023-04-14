@@ -121,7 +121,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public int userDelete(String userEmail, int userSeq) {
+	public int userDelete(String userPwd, String userEmail, int userSeq) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -133,6 +133,8 @@ public class UserDaoImpl implements UserDao {
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append("SELECT MAX(user_seq) FROM users");
 
+		
+		ResultSet rs = null;
 		int ret = -1;
 		try {
 			con = dbManaber.getConnection();
@@ -141,11 +143,22 @@ public class UserDaoImpl implements UserDao {
 			// 1. ID가 입력된 데이터를 삭제
 			pstmt = con.prepareStatement(sb.toString());
 			pstmt.setString(1, userEmail);
-			ret = pstmt.executeUpdate();
+			rs = pstmt.executeQuery();
+			UserDto user = new UserDto();
+
+			if (rs.next()) {
+				
+				user.setUserSeq(rs.getInt("user_seq"));
+				user.setUserName(rs.getString("user_name"));
+				user.setUserEmail(rs.getString("user_email"));
+				user.setUserPassword(rs.getString("user_password"));
+				user.setUserRegisterDate(rs.getDate("user_register_date"));
+
+			}
 
 			// 2. 해당 ID가 마지막 번호였다면 AUTO_INCREMENT 값을 삭제된 데이터 인덱스로 지정
 			pstmt2 = con.prepareStatement(sb2.toString());
-			ResultSet rs = pstmt2.executeQuery();
+			rs = pstmt2.executeQuery();
 			if (rs.next()) {
 				int maxUserSeq = rs.getInt(1);
 				if (userSeq > maxUserSeq) {
@@ -159,7 +172,25 @@ public class UserDaoImpl implements UserDao {
 				}
 			}
 
+			
+			if (user != null) {
+				String actualPassword = user.getUserPassword();
+				String hashedInputPassword = hashPassword(userPwd);
+
+				System.out.println(actualPassword);
+				System.out.println(hashedInputPassword);
+
+				boolean isSamePassword = hashedInputPassword.equals(actualPassword);
+
+				if (isSamePassword) {
+
+					user.setUserPassword(null);
+					ret = 1;
+				}	
+			}
+			
 			con.commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
@@ -171,8 +202,18 @@ public class UserDaoImpl implements UserDao {
 			DBManager.releaseConnection(pstmt, con);
 		}
 
-		return 0;
+		return ret;
 
+	}
+	
+	public String hashPassword(String password) {
+
+		int hash = 0;
+		for (int i = 0; i < password.length(); i++) {
+			char c = password.charAt(i);
+			hash = (hash * 31 + c) ^ (c * i);
+		}
+		return Integer.toString(hash);
 	}
 
 }
