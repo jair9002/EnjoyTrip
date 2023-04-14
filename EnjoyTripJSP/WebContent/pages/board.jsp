@@ -93,7 +93,7 @@
 	          </li>
 	        </ul>
 	      </nav>
-	      <!-- 검색 창 start -->
+	      <!-- 검색 창 start 
 	      <div class="container text-center">
 	        <form class="d-flex my-3" onsubmit="return false;" role="search">
 	          <input
@@ -113,7 +113,7 @@
 	          </button>
 	        </form>
 	      </div>
-	      <!-- 검색창 end -->
+	   -->
 	    </div>
 	  </div>
 	</div>
